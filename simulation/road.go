@@ -1,5 +1,13 @@
 package simulation
 
+/*
+	Roads are 2D grid of cells
+ . -> empty road
+ C -> Car 
+ R -> Red Light
+ G -> Green Light
+
+*/
 
 type CellType int
 
