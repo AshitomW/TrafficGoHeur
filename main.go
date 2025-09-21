@@ -6,30 +6,30 @@ import (
 )
 
 func main(){
-	road := simulation.NewRoad(20,10)
-	
-	c1 := &simulation.Car{X: 0, Y: 5, Direction: simulation.East}
-	c2 := &simulation.Car{X: 2, Y: 5, Direction: simulation.East}
-	c3 := &simulation.Car{X: 10, Y: 2, Direction: simulation.South}
+	road := simulation.NewRoad(30,4) // 30 cells wide road , 4 lanes
 
+ var	lights []*simulation.TrafficLight
+	light := &simulation.TrafficLight{X:5,Y:0,IsGreen: true,SwitchRate: 10}
+	light_t := &simulation.TrafficLight{X:15,Y:1,IsGreen: true,SwitchRate: 10}
+	light_three := &simulation.TrafficLight{X:23,Y:2,IsGreen: true,SwitchRate: 10}
+	light_four := &simulation.TrafficLight{X:27,Y:3,IsGreen: true,SwitchRate: 10}
 
-	light := &simulation.TrafficLight{X:8,Y:5,IsGreen: true, SwitchRate: 5}
-
-
-	road.Grid[c1.Y][c1.X].Type = simulation.CarCell
-	road.Grid[c2.Y][c2.X].Type = simulation.CarCell
-	road.Grid[c3.Y][c3.X].Type = simulation.CarCell
-
+	lights = append(lights, light,light_t,light_three,light_four)
 	road.Grid[light.Y][light.X].Type = simulation.TrafficLightGreen
 
 
-	s := &simulation.Simulation{
-		Road: road,
-		Cars: []*simulation.Car{c1,c2,c3},
-		Lights: []*simulation.TrafficLight{light},
-		TickDelay: 500 * time.Millisecond,
+	spawner:= simulation.NewSpawnner(road,0.3)
+
+
+	s:= &simulation.Simulation{
+		Road:road,
+		Cars: []*simulation.Car{},
+		Lights: lights,
+		Spawner: spawner,
+		TickDelay: 400 * time.Millisecond,
 	}
 
-	s.Run(30)
+	s.Run(50)
+
 
 }

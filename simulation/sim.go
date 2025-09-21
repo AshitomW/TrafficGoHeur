@@ -10,6 +10,7 @@ type Simulation struct{
 	Road *Road
 	Cars []*Car
 	Lights []*TrafficLight
+	Spawner *Spawner
 	TickDelay time.Duration
 }
 
@@ -24,14 +25,24 @@ func (s *Simulation) Step(){
 	}
 
 	// move the cars 
-
+	var activeCars []*Car
 	for _,c := range s.Cars{
 		if ShouldMove(c,s.Road){
 			s.Road.Grid[c.Y][c.X].Type = Empty // clear the old position
 			c.X,c.Y = c.Move()
 		}
-		s.Road.Grid[c.Y][c.X].Type = CarCell
+	if c.X >= 0 && c.Y >= 0 && c.X < s.Road.Width && c.Y < s.Road.Height {
+			s.Road.Grid[c.Y][c.X].Type = CarCell
+			activeCars = append(activeCars, c)
+		}
+
 	}
+s.Cars = activeCars
+
+	if s.Spawner != nil{
+		s.Spawner.TrySpawn(&s.Cars)
+	}
+
 }
 
 func (s *Simulation) Render(){
